@@ -123,7 +123,11 @@ $(document).ready(function () {
 <p>I am removing the first 7 columns, because these values are not important for our prediction. They contain user info and time data. Also I am removing all columns that had NA values inside. Then I am preprocessing so that the data is centered and scaled.</p>
 <pre class="r"><code>  trainingClean = rawTraining[,c(-1:-7)]
   trainingNa &lt;- trainingClean[,colSums(is.na(trainingClean)) == 0]
-  trainingPre = predict(preProcess(trainingNa), trainingNa)</code></pre>
+  trainingPre = predict(preProcess(trainingNa), trainingNa)
+  
+  testingClean = rawTesting[,c(-1:-7)]
+  testing &lt;- testingClean[,colSums(is.na(testingClean)) == 0]
+  testing = predict(preProcess(testing), testing)</code></pre>
 </div>
 <div id="splitting-the-data" class="section level2">
 <h2>Splitting the data</h2>
@@ -174,7 +178,14 @@ predRfConf = confusionMatrix(validation$classe, predRf)</code></pre>
 ## Detection Rate         0.2843   0.1927   0.1733   0.1623   0.1831
 ## Detection Prevalence   0.2845   0.1935   0.1743   0.1639   0.1837
 ## Balanced Accuracy      0.9988   0.9963   0.9941   0.9971   0.9996</code></pre>
-<p>quizPrediction = predict(modelRf, newdata = testing)</p>
+</div>
+<div id="predicting-based-on-model" class="section level2">
+<h2>Predicting based on model</h2>
+<p>When predicting on test data, the model is correct 20 out of 20.</p>
+<pre class="r"><code>quizPrediction = predict(modelRf, testing)</code></pre>
+<pre class="r"><code>quizPrediction</code></pre>
+<pre><code>##  [1] E A A E A E D B A E B C B A E E E B E B
+## Levels: A B C D E</code></pre>
 </div>
 
 
