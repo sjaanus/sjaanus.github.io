@@ -145,7 +145,7 @@ $(document).ready(function () {
 <p>After model is ready, I am testing it on my validation set and checking the accuracy</p>
 <pre class="r"><code>predRf = predict(modelRf, newdata = validation)
 predRfConf = confusionMatrix(validation$classe, predRf)</code></pre>
-<p>Validation shows that accuracy is 0.9957, which is almost perfect.</p>
+<p>Validation shows that accuracy is 99.57%. Estimated out-of-sample error is therefore 0.43%.</p>
 <pre class="r"><code>predRfConf</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
