@@ -120,21 +120,19 @@ $(document).ready(function () {
 </div>
 <div id="cleaning-the-data" class="section level2">
 <h2>Cleaning the data</h2>
-<p>I am removing the first 7 columns, because these values are not important for our prediction. They contain user info and time data. Also I am removing all columns that had NA values inside. Then I am preprocessing so that the data is centered and scaled.</p>
+<p>I am removing the first 7 columns, because these values are not important for our prediction. They contain user info and time data. Also I am removing all columns that had NA values inside.</p>
 <pre class="r"><code>  trainingClean = rawTraining[,c(-1:-7)]
   trainingNa &lt;- trainingClean[,colSums(is.na(trainingClean)) == 0]
-  trainingPre = predict(preProcess(trainingNa), trainingNa)
   
   testingClean = rawTesting[,c(-1:-7)]
-  testing &lt;- testingClean[,colSums(is.na(testingClean)) == 0]
-  testing = predict(preProcess(testing), testing)</code></pre>
+  testing &lt;- testingClean[,colSums(is.na(testingClean)) == 0]</code></pre>
 </div>
 <div id="splitting-the-data" class="section level2">
 <h2>Splitting the data</h2>
 <p>Finally I am splitting the data into training and validation dataset.</p>
-<pre class="r"><code>  inTrain = createDataPartition(trainingPre$classe, p = 3/4)[[1]]
-  training = trainingPre[ inTrain,]
-  validation = trainingPre[-inTrain,]</code></pre>
+<pre class="r"><code>  inTrain = createDataPartition(trainingNa$classe, p = 3/4)[[1]]
+  training = trainingNa[ inTrain,]
+  validation = trainingNa[-inTrain,]</code></pre>
 </div>
 <div id="building-the-model" class="section level2">
 <h2>Building the model</h2>
@@ -145,46 +143,46 @@ $(document).ready(function () {
 <p>After model is ready, I am testing it on my validation set and checking the accuracy</p>
 <pre class="r"><code>predRf = predict(modelRf, newdata = validation)
 predRfConf = confusionMatrix(validation$classe, predRf)</code></pre>
-<p>Validation shows that accuracy is 99.57%. Estimated out-of-sample error is therefore 0.43%.</p>
+<p>Validation shows that accuracy is 99.37%. Estimated out-of-sample error is therefore 0.63%.</p>
 <pre class="r"><code>predRfConf</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1394    1    0    0    0
-##          B    3  945    1    0    0
-##          C    0    5  850    0    0
-##          D    0    0    8  796    0
-##          E    0    0    0    3  898
+##          A 1393    2    0    0    0
+##          B    9  940    0    0    0
+##          C    0    2  843   10    0
+##          D    0    0    6  798    0
+##          E    0    0    0    2  899
 ## 
 ## Overall Statistics
-##                                           
-##                Accuracy : 0.9957          
-##                  95% CI : (0.9935, 0.9973)
-##     No Information Rate : 0.2849          
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-##                                           
-##                   Kappa : 0.9946          
-##  Mcnemar's Test P-Value : NA              
+##                                          
+##                Accuracy : 0.9937         
+##                  95% CI : (0.991, 0.9957)
+##     No Information Rate : 0.2859         
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+##                                          
+##                   Kappa : 0.992          
+##  Mcnemar's Test P-Value : NA             
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9979   0.9937   0.9895   0.9962   1.0000
-## Specificity            0.9997   0.9990   0.9988   0.9981   0.9993
-## Pos Pred Value         0.9993   0.9958   0.9942   0.9900   0.9967
-## Neg Pred Value         0.9991   0.9985   0.9978   0.9993   1.0000
-## Prevalence             0.2849   0.1939   0.1752   0.1629   0.1831
-## Detection Rate         0.2843   0.1927   0.1733   0.1623   0.1831
+## Sensitivity            0.9936   0.9958   0.9929   0.9852   1.0000
+## Specificity            0.9994   0.9977   0.9970   0.9985   0.9995
+## Pos Pred Value         0.9986   0.9905   0.9860   0.9925   0.9978
+## Neg Pred Value         0.9974   0.9990   0.9985   0.9971   1.0000
+## Prevalence             0.2859   0.1925   0.1731   0.1652   0.1833
+## Detection Rate         0.2841   0.1917   0.1719   0.1627   0.1833
 ## Detection Prevalence   0.2845   0.1935   0.1743   0.1639   0.1837
-## Balanced Accuracy      0.9988   0.9963   0.9941   0.9971   0.9996</code></pre>
+## Balanced Accuracy      0.9965   0.9967   0.9950   0.9919   0.9998</code></pre>
 </div>
 <div id="predicting-based-on-model" class="section level2">
 <h2>Predicting based on model</h2>
 <p>When predicting on test data, the model is correct 20 out of 20.</p>
 <pre class="r"><code>quizPrediction = predict(modelRf, testing)</code></pre>
 <pre class="r"><code>quizPrediction</code></pre>
-<pre><code>##  [1] E A A E A E D B A E B C B A E E E B E B
+<pre><code>##  [1] B A B A A E D B A A B C B A E E A B B B
 ## Levels: A B C D E</code></pre>
 </div>
 
